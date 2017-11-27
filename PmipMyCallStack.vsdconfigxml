@@ -11,6 +11,7 @@
         <InterfaceGroup>
           <NoFilter/>
           <Interface Name="IDkmCallStackFilter"/>
+          <Interface Name="IDkmLoadCompleteNotification"/>
         </InterfaceGroup>
       </Implements>
     </Class>

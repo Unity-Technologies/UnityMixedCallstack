@@ -3,23 +3,39 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
-using System.IO.Pipes;
-using System.Linq;
-using System.Threading;
+using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Debugger;
 using Microsoft.VisualStudio.Debugger.CallStack;
 using Microsoft.VisualStudio.Debugger.ComponentInterfaces;
+using Microsoft.VisualStudio.Shell;
+using Microsoft.VisualStudio.Shell.Interop;
 
 namespace PmipMyCallStack
 {
-    public class PmipCallStackFilter : IDkmCallStackFilter
+    public class PmipCallStackFilter : IDkmCallStackFilter, IDkmLoadCompleteNotification
     {
         private static List<Range> _rangesSortedByIp = new List<Range>();
         private static FuzzyRangeComparer _comparer = new FuzzyRangeComparer();
-
+        private static bool _enabled = true;
+        private static IVsOutputWindowPane _debugPane;
         private static string _currentFile;
         private static FileStream _fileStream;
         private static StreamReader _fileStreamReader;
+
+        public void OnLoadComplete(DkmProcess process, DkmWorkList workList, DkmEventDescriptor eventDescriptor)
+        {
+            IVsOutputWindow outWindow = Package.GetGlobalService(typeof(SVsOutputWindow)) as IVsOutputWindow;
+            Guid debugPaneGuid = VSConstants.GUID_OutWindowDebugPane;
+            outWindow.GetPane(ref debugPaneGuid, out _debugPane);
+
+            var env = Environment.GetEnvironmentVariable("UNITY_MIXED_CALLSTACK");
+            if (env == null || env == "0") // plugin not enabled
+            {
+                _debugPane.OutputString("Warning: To use the UnityMixedCallstack plugin please set the environment variable UNITY_MIXED_CALLSTACK=1 and relaunch Unity and Visual Studio\n");
+                _debugPane.Activate();
+                _enabled = false;
+            }
+        }
 
         public DkmStackWalkFrame[] FilterNextFrame(DkmStackContext stackContext, DkmStackWalkFrame input)
         {
@@ -35,11 +51,13 @@ namespace PmipMyCallStack
             if (!stackContext.Thread.IsMainThread) // error case
                 return new[] { input };
 
+            if (!_enabled) // environment variable not set
+                return new[] { input };
 
             return new[] { PmipStackFrame(stackContext, input) };
         }
 
-        public static DkmStackWalkFrame PmipStackFrame(DkmStackContext stackContext, DkmStackWalkFrame frame)
+        private static DkmStackWalkFrame PmipStackFrame(DkmStackContext stackContext, DkmStackWalkFrame frame)
         {
             RefreshStackData(frame.Process.LivePart.Id);
             string name = null;
@@ -69,7 +87,14 @@ namespace PmipMyCallStack
             return int.Parse(tokens[2]);
         }
 
-        public static void RefreshStackData(int pid)
+        private static void DisposeStreams()
+        {
+            _fileStreamReader?.Dispose();
+            _fileStream?.Dispose();
+            _rangesSortedByIp.Clear();
+        }
+
+        private static void RefreshStackData(int pid)
         {
             DirectoryInfo taskDirectory = new DirectoryInfo(Path.GetTempPath());
             FileInfo[] taskFiles = taskDirectory.GetFiles("pmip_" + pid + "_*.txt");
@@ -82,19 +107,30 @@ namespace PmipMyCallStack
 
             if (_currentFile != fileName)
             {
-                _fileStreamReader?.Dispose();
-                _fileStream?.Dispose();
-                _rangesSortedByIp.Clear();
-
+                DisposeStreams();
                 try
                 {
                     _fileStream = new FileStream(fileName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite | FileShare.Delete);
                     _fileStreamReader = new StreamReader(_fileStream);
                     _currentFile = fileName;
+                    var versionStr = _fileStreamReader.ReadLine();
+                    const char delimiter = ':';
+                    var tokens = versionStr.Split(delimiter);
+
+                    if (tokens.Length != 2)
+                        throw new Exception("Failed reading input file " + fileName + ": Incorrect format");
+
+                    var version = double.Parse(tokens[1]);
+
+                    if(version > 1.0)
+                        throw new Exception("Failed reading input file " + fileName + ": A newer version of UnityMixedCallstacks plugin is required to read this file");
                 }
                 catch (Exception ex)
                 {
-                    Debug.WriteLine("Unable to read dumped pmip file: " + ex.Message);
+                    _currentFile = null;
+                    _debugPane.OutputString("Unable to read dumped pmip file: " + ex.Message + "\n");
+                    DisposeStreams();
+                    return;
                 }
             }
 
@@ -121,13 +157,13 @@ namespace PmipMyCallStack
             }
             catch (Exception ex)
             {
-                Debug.WriteLine("Unable to read dumped pmip file: " + ex.Message);
+                _debugPane.OutputString("Unable to read dumped pmip file: " + ex.Message + "\n");
             }
 
             _rangesSortedByIp.Sort((r1, r2) => r1.Start.CompareTo(r2.Start));
         }
 
-        public static bool TryGetDescriptionForIp(ulong ip, out string name)
+        private static bool TryGetDescriptionForIp(ulong ip, out string name)
         {
             name = string.Empty;
 
