@@ -119,7 +119,8 @@ namespace UnityMixedCallstack
                     if (tokens.Length != 2)
                         throw new Exception("Failed reading input file " + fileName + ": Incorrect format");
 
-                    var version = double.Parse(tokens[1]);
+                    if (!double.TryParse(tokens[1], NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out var version))
+                        throw new Exception("Failed reading input file " + fileName + ": Incorrect version format");
 
                     if(version > 1.0)
                         throw new Exception("Failed reading input file " + fileName + ": A newer version of UnityMixedCallstacks plugin is required to read this file");
