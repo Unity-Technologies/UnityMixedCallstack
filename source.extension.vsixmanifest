@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
   <Metadata>
-    <Identity Id="UnityMixedCallstack.mderoy.1bc395e8-c1ea-4a2d-8a37-19e7f0c302b9" Version="2.4" Language="en-US" Publisher="Jb Evain, Michael DeRoy, Jonathan Chambers" />
+    <Identity Id="UnityMixedCallstack.mderoy.1bc395e8-c1ea-4a2d-8a37-19e7f0c302b9" Version="2.6" Language="en-US" Publisher="Jb Evain, Michael DeRoy, Jonathan Chambers, Alex Thibodeau" />
     <DisplayName>Unity Mixed Callstack</DisplayName>
     <Description xml:space="preserve">Visual Studio native debugger extension to help debug native applications using Mono. Originally developed by Jb Evain, Updated for Unity by Michael DeRoy and Jonathan Chambers</Description>
   </Metadata>
