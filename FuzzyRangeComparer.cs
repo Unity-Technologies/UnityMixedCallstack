@@ -7,6 +7,7 @@ namespace UnityMixedCallstack
         public ulong Start;
         public ulong End;
         public string Name;
+        public string File;
     }
     class FuzzyRangeComparer : IComparer<Range>
     {
