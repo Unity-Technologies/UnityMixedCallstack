@@ -1,14 +1,15 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <MinimumVisualStudioVersion>14.0</MinimumVisualStudioVersion>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">11.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
     <!-- <VSSDK140Install Condition="'$(VSSDK140Install)' == ''">$(MSBuildProgramFiles32)\Microsoft Visual Studio 14.0\VSSDK\</VSSDK140Install> -->
-    <VSSDK170Install Condition="'$(VSSDK170Install)' == ''">$(MSBuildProgramFiles32)\Microsoft Visual Studio\2019\Professional\VSSDK\</VSSDK170Install>
+    <VSSDK180Install Condition="'$(VSSDK180Install)' == ''">$(PROGRAMFILES)\Microsoft Visual Studio\2022\VSSDK\</VSSDK180Install>
     <VsixType>v3</VsixType>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -20,11 +21,11 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>UnityMixedCallStack</RootNamespace>
     <AssemblyName>UnityMixedCallStack</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <GeneratePkgDefFile>false</GeneratePkgDefFile>
     <!--Root directory to Concord SDK install; includes the trailing backslash '\'.-->
-    <ConcordSDKDir>$(VSSDK170Install)VisualStudioIntegration\</ConcordSDKDir>
+    <ConcordSDKDir>$(VSSDK180Install)VisualStudioIntegration\</ConcordSDKDir>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -54,8 +55,6 @@
     <StartArguments>/rootsuffix Exp</StartArguments>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Microsoft.VisualStudio.Shell.14.0, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
-    <Reference Include="Microsoft.VisualStudio.Shell.Interop, Version=7.1.40304.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="Microsoft.VisualStudio.Debugger.Engine">
@@ -79,10 +78,11 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.VisualStudio.Sdk.BuildTasks.14.0">
-      <Version>14.9.23</Version>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-      <PrivateAssets>all</PrivateAssets>
+    <PackageReference Include="Microsoft.VisualStudio.SDK">
+      <Version>17.0.31902.203</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.VisualStudio.Debugger.Engine">
+      <Version>17.0.1110801</Version>
     </PackageReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
