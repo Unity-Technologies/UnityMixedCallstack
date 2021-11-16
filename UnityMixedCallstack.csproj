@@ -1,11 +1,12 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <MinimumVisualStudioVersion>14.0</MinimumVisualStudioVersion>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">11.0</VisualStudioVersion>
-    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
     <!-- <VSSDK140Install Condition="'$(VSSDK140Install)' == ''">$(MSBuildProgramFiles32)\Microsoft Visual Studio 14.0\VSSDK\</VSSDK140Install> -->
-    <VSSDK180Install Condition="'$(VSSDK180Install)' == ''">$(PROGRAMFILES)\Microsoft Visual Studio\2022\VSSDK\</VSSDK180Install>
+    <VSSdkPath Condition="'$(VisualStudioVersion.Contains(`17`))'">$(ProgramFiles)\Microsoft Visual Studio\2022\VSSDK\</VSSdkPath>
+    <VSSdkPath Condition="'$(VisualStudioVersion.Contains(`16`))'">$(MSBuildProgramFiles32)\Microsoft Visual Studio\2019\VSSDK\</VSSdkPath>
     <VsixType>v3</VsixType>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
@@ -25,7 +26,7 @@
     <FileAlignment>512</FileAlignment>
     <GeneratePkgDefFile>false</GeneratePkgDefFile>
     <!--Root directory to Concord SDK install; includes the trailing backslash '\'.-->
-    <ConcordSDKDir>$(VSSDK180Install)VisualStudioIntegration\</ConcordSDKDir>
+    <ConcordSDKDir>$(VSSdkPath)VisualStudioIntegration\</ConcordSDKDir>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -54,12 +55,41 @@
     <StartWorkingDirectory>$(DevEnvDir)</StartWorkingDirectory>
     <StartArguments>/rootsuffix Exp</StartArguments>
   </PropertyGroup>
+
+  <PropertyGroup>
+    <VsVersion Condition="'$(VisualStudioVersion.Contains(`17`))'">VS2022</VsVersion>
+    <VsVersion Condition="'$(VisualStudioVersion.Contains(`16`))'">VS2019</VsVersion>
+    <OutputPath>bin\$(VsVersion)\$(Configuration)\</OutputPath>
+    <IntermediateOutputPath>obj\$(VsVersion)\$(Configuration)\</IntermediateOutputPath>    
+  </PropertyGroup>
+  <Choose>
+    <When Condition="'$(VsVersion)' == 'VS2022'">
+      <PropertyGroup>
+        <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+      </PropertyGroup>
+      <ItemGroup>
+        <PackageReference Include="Microsoft.VisualStudio.SDK" Version="17.0.31902.203" />
+        <PackageReference Include="Microsoft.VSSDK.BuildTools" Version="17.0.5232" />
+        <PackageReference Include="Microsoft.VisualStudio.Debugger.Engine" Version="17.0.1110801" />
+      </ItemGroup>
+    </When>
+    <Otherwise>
+      <PropertyGroup>
+        <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+      </PropertyGroup>
+      <ItemGroup>
+        <PackageReference Include="Microsoft.VisualStudio.SDK" Version="15.0.1" />
+        <PackageReference Include="Microsoft.VSSDK.BuildTools" Version="15.9.3039" />
+        <PackageReference Include="Microsoft.VisualStudio.Debugger.Engine" Version="15.9.28307" />
+      </ItemGroup>
+    </Otherwise>
+  </Choose>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="Microsoft.VisualStudio.Debugger.Engine">
-      <HintPath>$(ConcordSDKDir)Reference Assemblies\Microsoft.VisualStudio.Debugger.Engine.dll</HintPath>
-      <Private>False</Private>
+        <HintPath>$(ConcordSDKDir)Reference Assemblies\Microsoft.VisualStudio.Debugger.Engine.dll</HintPath>
+        <Private>False</Private>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -74,17 +104,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="source.extension.vsixmanifest">
-      <SubType>Designer</SubType>
+        <SubType>Designer</SubType>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="Microsoft.VisualStudio.SDK">
-      <Version>17.0.31902.203</Version>
-    </PackageReference>
-    <PackageReference Include="Microsoft.VisualStudio.Debugger.Engine">
-      <Version>17.0.1110801</Version>
-    </PackageReference>
-  </ItemGroup>
+  </ItemGroup>    
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(ConcordSDKDir)Tools\bin\Microsoft.VSSDK.Debugger.VSDConfigTool.targets" />
   <Import Project="$(VSToolsPath)\VSSDK\Microsoft.VsSDK.targets" Condition="'$(VSToolsPath)' != ''" />
