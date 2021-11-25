@@ -5,8 +5,8 @@
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">11.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
     <!-- <VSSDK140Install Condition="'$(VSSDK140Install)' == ''">$(MSBuildProgramFiles32)\Microsoft Visual Studio 14.0\VSSDK\</VSSDK140Install> -->
-    <VSSdkPath Condition="'$(VisualStudioVersion.Contains(`17`))'">$(ProgramFiles)\Microsoft Visual Studio\2022\VSSDK\</VSSdkPath>
-    <VSSdkPath Condition="'$(VisualStudioVersion.Contains(`16`))'">$(MSBuildProgramFiles32)\Microsoft Visual Studio\2019\VSSDK\</VSSdkPath>
+    <VSSdkPath Condition="'$(VisualStudioVersion.Contains(`17`))'">$(ProgramFiles)\Microsoft Visual Studio\2022\Professional\VSSDK\</VSSdkPath>
+    <VSSdkPath Condition="'$(VisualStudioVersion.Contains(`16`))'">$(MSBuildProgramFiles32)\Microsoft Visual Studio\2019\Professional\VSSDK\</VSSdkPath>
     <VsixType>v3</VsixType>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
