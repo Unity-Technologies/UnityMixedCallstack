@@ -1,13 +1,13 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
   <Metadata>
-    <Identity Id="UnityMixedCallstack.mderoy.1bc395e8-c1ea-4a2d-8a37-19e7f0c302b9" Version="2.6" Language="en-US" Publisher="Jb Evain, Michael DeRoy, Jonathan Chambers, Alex Thibodeau" />
+    <Identity Id="UnityMixedCallstack.mderoy.1bc395e8-c1ea-4a2d-8a37-19e7f0c302b9" Version="2.8" Language="en-US" Publisher="Jb Evain, Michael DeRoy, Jonathan Chambers, Alex Thibodeau" />
     <DisplayName>Unity Mixed Callstack</DisplayName>
     <Description xml:space="preserve">Visual Studio native debugger extension to help debug native applications using Mono. Originally developed by Jb Evain, Updated for Unity by Michael DeRoy and Jonathan Chambers</Description>
   </Metadata>
   <Installation>
     <!-- Enable/Disable as needed. For now enabled for VS2022-->
-    <InstallationTarget Id="Microsoft.VisualStudio.Community" Version="[17.0]">
+    <InstallationTarget Id="Microsoft.VisualStudio.Community" Version="[17.0, 18.0)">
         <ProductArchitecture>amd64</ProductArchitecture>
     </InstallationTarget>
     <!--
@@ -15,12 +15,12 @@
     -->
   </Installation>
   <Dependencies>
-    <Dependency Id="Microsoft.Framework.NDP" DisplayName="Microsoft .NET Framework" d:Source="Manual" Version="4.5" />
+    <Dependency Id="Microsoft.Framework.NDP" DisplayName="Microsoft .NET Framework" d:Source="Manual" Version="[4.5,)" />
   </Dependencies>
   <Assets>
     <Asset Type="DebuggerEngineExtension" Path="UnityMixedCallstack.vsdconfig"/>
   </Assets>
   <Prerequisites>
-    <Prerequisite Id="Microsoft.VisualStudio.Component.CoreEditor" Version="[15.0.25904.2,)" DisplayName="Visual Studio core editor" />
+    <Prerequisite Id="Microsoft.VisualStudio.Component.CoreEditor" Version="[17.0, 18.0)" DisplayName="Visual Studio core editor" />
   </Prerequisites>
 </PackageManifest>
