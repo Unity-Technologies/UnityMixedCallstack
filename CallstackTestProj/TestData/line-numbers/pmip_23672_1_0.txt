@@ -1,0 +1,208 @@
+UnityMixedCallstacks:2.0
+00000243885C1720;00000243885C175F;restore_context
+00000243885C1820;00000243885C1869;call_filter
+00000243885C18A0;00000243885C1964;throw_exception
+00000243885C19C0;00000243885C1A84;rethrow_exception
+00000243885C1AE0;00000243885C1BA4;rethrow_preserve_exception
+00000243885C1E40;00000243885C1EFF;llvm_resume_unwind_trampoline
+00000243885C1D20;00000243885C1DDB;llvm_throw_corlib_exception_abs_trampoline
+00000243885C1C00;00000243885C1CB7;llvm_throw_corlib_exception_trampoline
+00000243885C1F60;00000243885C2017;throw_corlib_exception
+---00000243885D0BF0;00000243885D0CEE;[mscorlib.dll] System.OutOfMemoryException:.ctor (string)
+00000243885D0BF0;00000243885D0CEE;[mscorlib.dll] System.OutOfMemoryException:.ctor (string)
+---00000243885D0D30;00000243885D10F2;[mscorlib.dll] (wrapper runtime-invoke) <Module>:runtime_invoke_void__this___object (object,intptr,intptr,intptr)
+00000243885D0D30;00000243885D10F2;[mscorlib.dll] (wrapper runtime-invoke) <Module>:runtime_invoke_void__this___object (object,intptr,intptr,intptr)
+---00000243885D1110;00000243885D120E;[mscorlib.dll] System.SystemException:.ctor (string)
+00000243885D1110;00000243885D120E;[mscorlib.dll] System.SystemException:.ctor (string)
+---00000243885D1230;00000243885D134F;[mscorlib.dll] System.Exception:.ctor (string)
+00000243885D1230;00000243885D134F;[mscorlib.dll] System.Exception:.ctor (string)
+---00000243885D1380;00000243885D1473;[mscorlib.dll] System.Exception:.cctor ()
+00000243885D1380;00000243885D1473;[mscorlib.dll] System.Exception:.cctor ()
+---00000243885D14A0;00000243885D184D;[mscorlib.dll] (wrapper runtime-invoke) object:runtime_invoke_void (object,intptr,intptr,intptr)
+00000243885D14A0;00000243885D184D;[mscorlib.dll] (wrapper runtime-invoke) object:runtime_invoke_void (object,intptr,intptr,intptr)
+---00000243885D1870;00000243885D1A1C;[mscorlib.dll] (wrapper managed-to-native) object:__icall_wrapper_ves_icall_object_new_specific (intptr)
+00000243885D1870;00000243885D1A1C;[mscorlib.dll] (wrapper managed-to-native) object:__icall_wrapper_ves_icall_object_new_specific (intptr)
+---00000243885D1A30;00000243885D1AA4;[mscorlib.dll] object:.ctor ()
+00000243885D1A30;00000243885D1AA4;[mscorlib.dll] object:.ctor ()
+---00000243885D1AD0;00000243885D1B6F;[mscorlib.dll] (wrapper write-barrier) object:wbarrier_conc (intptr)
+00000243885D1AD0;00000243885D1B6F;[mscorlib.dll] (wrapper write-barrier) object:wbarrier_conc (intptr)
+---00000243885D1B80;00000243885D1D53;[mscorlib.dll] (wrapper managed-to-native) object:__icall_wrapper_mono_gc_wbarrier_generic_nostore_internal (intptr)
+00000243885D1B80;00000243885D1D53;[mscorlib.dll] (wrapper managed-to-native) object:__icall_wrapper_mono_gc_wbarrier_generic_nostore_internal (intptr)
+---00000243885D1D70;00000243885D1F0F;[mscorlib.dll] System.Exception:Init ()
+00000243885D1D70;00000243885D1F0F;[mscorlib.dll] System.Exception:Init ()
+---00000243885D1F30;00000243885D1FC9;[mscorlib.dll] System.Exception:set_HResult (int)
+00000243885D1F30;00000243885D1FC9;[mscorlib.dll] System.Exception:set_HResult (int)
+---00000243885D1FE0;00000243885D207F;[mscorlib.dll] System.Runtime.Serialization.SafeSerializationManager:.ctor ()
+00000243885D1FE0;00000243885D207F;[mscorlib.dll] System.Runtime.Serialization.SafeSerializationManager:.ctor ()
+---00000243885D2090;00000243885D218E;[mscorlib.dll] System.NullReferenceException:.ctor (string)
+00000243885D2090;00000243885D218E;[mscorlib.dll] System.NullReferenceException:.ctor (string)
+---00000243885D21A0;00000243885D229E;[mscorlib.dll] System.StackOverflowException:.ctor (string)
+00000243885D21A0;00000243885D229E;[mscorlib.dll] System.StackOverflowException:.ctor (string)
+00000243885C2080;00000243885C208A;delegate_invoke_impl_has_target
+00000243885C20D0;00000243885C20DC;delegate_invoke_impl_target_2
+---00000243885D22E0;00000243885D2494;[mscorlib.dll] (wrapper managed-to-native) object:__icall_wrapper_ves_icall_array_new_specific (intptr,int)
+00000243885D22E0;00000243885D2494;[mscorlib.dll] (wrapper managed-to-native) object:__icall_wrapper_ves_icall_array_new_specific (intptr,int)
+---00000243885D24B0;00000243885D2683;[mscorlib.dll] (wrapper managed-to-native) object:__icall_wrapper_mono_generic_class_init (intptr)
+00000243885D24B0;00000243885D2683;[mscorlib.dll] (wrapper managed-to-native) object:__icall_wrapper_mono_generic_class_init (intptr)
+00000243885C2120;00000243885C2129;delegate_invoke_impl_target_1
+00000243885C2170;00000243885C2188;rgctx_fetch_trampoline_rgctx_0
+00000243885C21C0;00000243885C21D8;rgctx_fetch_trampoline_rgctx_1
+00000243885C2210;00000243885C2228;rgctx_fetch_trampoline_rgctx_2
+00000243885C2260;00000243885C2280;rgctx_fetch_trampoline_rgctx_3
+00000243885C22C0;00000243885C22E0;rgctx_fetch_trampoline_rgctx_4
+00000243885C2320;00000243885C2340;rgctx_fetch_trampoline_rgctx_5
+---00000243885D2700;00000243885D28AC;[mscorlib.dll] (wrapper managed-to-native) object:__icall_wrapper_mono_helper_ldstr_mscorlib (int)
+00000243885D2700;00000243885D28AC;[mscorlib.dll] (wrapper managed-to-native) object:__icall_wrapper_mono_helper_ldstr_mscorlib (int)
+---00000243885D28C0;00000243885D2A64;[mscorlib.dll] (wrapper managed-to-native) object:__icall_wrapper_mono_thread_get_undeniable_exception ()
+00000243885D28C0;00000243885D2A64;[mscorlib.dll] (wrapper managed-to-native) object:__icall_wrapper_mono_thread_get_undeniable_exception ()
+00000243885C2380;00000243885C2383;delegate_invoke_impl_target_0
+00000243885C23D0;00000243885C23E2;rgctx_fetch_trampoline_mrgctx_0
+00000243885C2420;00000243885C2432;rgctx_fetch_trampoline_mrgctx_1
+00000243885C2470;00000243885C2482;rgctx_fetch_trampoline_mrgctx_2
+00000243885C24C0;00000243885C24DB;rgctx_fetch_trampoline_mrgctx_3
+00000243885C2520;00000243885C253B;rgctx_fetch_trampoline_mrgctx_4
+00000243885C2580;00000243885C259B;rgctx_fetch_trampoline_mrgctx_5
+00000243885C25E0;00000243885C25FB;rgctx_fetch_trampoline_mrgctx_6
+00000243885C2640;00000243885C265B;rgctx_fetch_trampoline_mrgctx_7
+---00000243885D2AE0;00000243885D2CA4;[mscorlib.dll] (wrapper managed-to-native) object:__icall_wrapper_mono_marshal_isinst_with_cache (object,intptr,intptr)
+00000243885D2AE0;00000243885D2CA4;[mscorlib.dll] (wrapper managed-to-native) object:__icall_wrapper_mono_marshal_isinst_with_cache (object,intptr,intptr)
+00000243885C26A0;00000243885C26BB;rgctx_fetch_trampoline_mrgctx_8
+00000243885C2700;00000243885C271B;rgctx_fetch_trampoline_mrgctx_9
+00000243885C2760;00000243885C277B;rgctx_fetch_trampoline_mrgctx_10
+00000243885C27C0;00000243885C27DB;rgctx_fetch_trampoline_mrgctx_11
+00000243885C2820;00000243885C283B;rgctx_fetch_trampoline_mrgctx_12
+00000243885C2880;00000243885C289B;rgctx_fetch_trampoline_mrgctx_13
+00000243885C28E0;00000243885C2903;rgctx_fetch_trampoline_mrgctx_14
+---00000243885D2D10;00000243885D2EBC;[mscorlib.dll] (wrapper managed-to-native) object:__icall_wrapper_mono_marshal_string_to_utf16 (object)
+00000243885D2D10;00000243885D2EBC;[mscorlib.dll] (wrapper managed-to-native) object:__icall_wrapper_mono_marshal_string_to_utf16 (object)
+00000243885C2940;00000243885C2960;rgctx_fetch_trampoline_rgctx_6
+00000243885C29A0;00000243885C29C0;rgctx_fetch_trampoline_rgctx_7
+00000243885C2A00;00000243885C2A23;rgctx_fetch_trampoline_mrgctx_15
+00000243885C2A60;00000243885C2A83;rgctx_fetch_trampoline_mrgctx_16
+00000243885C2AC0;00000243885C2AE3;rgctx_fetch_trampoline_mrgctx_17
+00000243885C2B20;00000243885C2B40;rgctx_fetch_trampoline_rgctx_8
+00000243885C2B80;00000243885C2BA0;rgctx_fetch_trampoline_rgctx_9
+00000243885C2BE0;00000243885C2C03;rgctx_fetch_trampoline_mrgctx_18
+00000243885C2C40;00000243885C2C63;rgctx_fetch_trampoline_mrgctx_19
+00000243885C2CA0;00000243885C2CC3;rgctx_fetch_trampoline_mrgctx_20
+00000243885C2D00;00000243885C2D23;rgctx_fetch_trampoline_mrgctx_21
+00000243885C2D60;00000243885C2D83;rgctx_fetch_trampoline_mrgctx_22
+00000243885C2DC0;00000243885C2DE3;rgctx_fetch_trampoline_mrgctx_23
+00000243885C2E20;00000243885C2E43;rgctx_fetch_trampoline_mrgctx_24
+00000243885C2E80;00000243885C2EA3;rgctx_fetch_trampoline_mrgctx_25
+00000243885C2EE0;00000243885C2F08;rgctx_fetch_trampoline_rgctx_10
+---00000243885D2F80;00000243885D3134;[mscorlib.dll] (wrapper managed-to-native) object:__icall_wrapper_mono_ldvirtfn_gshared (object,intptr)
+00000243885D2F80;00000243885D3134;[mscorlib.dll] (wrapper managed-to-native) object:__icall_wrapper_mono_ldvirtfn_gshared (object,intptr)
+---00000243885D3150;00000243885D333B;[mscorlib.dll] (wrapper managed-to-native) object:__icall_wrapper_ves_icall_mono_delegate_ctor (object,object,intptr)
+00000243885D3150;00000243885D333B;[mscorlib.dll] (wrapper managed-to-native) object:__icall_wrapper_ves_icall_mono_delegate_ctor (object,object,intptr)
+00000243885C2F40;00000243885C2F68;rgctx_fetch_trampoline_rgctx_11
+00000243885C2FA0;00000243885C2FC3;rgctx_fetch_trampoline_mrgctx_26
+00000243885C3000;00000243885C3023;rgctx_fetch_trampoline_mrgctx_27
+00000243885C3060;00000243885C3083;rgctx_fetch_trampoline_mrgctx_28
+00000243885C30C0;00000243885C30D0;delegate_virtual_invoke_16
+00000243885C30E0;00000243885C30F1;delegate_virtual_invoke_imt_m_4
+00000243885C3100;00000243885C310F;delegate_invoke_impl_target_3
+00000243885C3150;00000243885C3164;delegate_invoke_impl_target_4
+---00000243885D3390;00000243885D3564;[mscorlib.dll] (wrapper managed-to-native) object:__icall_wrapper___emul_iconv_to_r_un (int)
+00000243885D3390;00000243885D3564;[mscorlib.dll] (wrapper managed-to-native) object:__icall_wrapper___emul_iconv_to_r_un (int)
+00000243885C31A0;00000243885C31C6;rgctx_fetch_trampoline_mrgctx_29
+00000243885C3200;00000243885C3226;rgctx_fetch_trampoline_mrgctx_30
+00000243885C3260;00000243885C3286;rgctx_fetch_trampoline_mrgctx_31
+00000243885C32C0;00000243885C32E6;rgctx_fetch_trampoline_mrgctx_32
+00000243885C3320;00000243885C3346;rgctx_fetch_trampoline_mrgctx_33
+00000243885C3380;00000243885C33A6;rgctx_fetch_trampoline_mrgctx_34
+00000243885C33E0;00000243885C3406;rgctx_fetch_trampoline_mrgctx_35
+00000243885C3440;00000243885C3466;rgctx_fetch_trampoline_mrgctx_36
+00000243885C34A0;00000243885C34CB;rgctx_fetch_trampoline_mrgctx_37
+00000243885C3510;00000243885C353B;rgctx_fetch_trampoline_mrgctx_38
+00000243885C3580;00000243885C35AB;rgctx_fetch_trampoline_mrgctx_39
+00000243885C35F0;00000243885C361B;rgctx_fetch_trampoline_mrgctx_40
+00000243885C3660;00000243885C368B;rgctx_fetch_trampoline_mrgctx_41
+00000243885C36D0;00000243885C36FB;rgctx_fetch_trampoline_mrgctx_42
+00000243885C3740;00000243885C376B;rgctx_fetch_trampoline_mrgctx_43
+00000243885C37B0;00000243885C37DB;rgctx_fetch_trampoline_mrgctx_44
+00000243885C3820;00000243885C384B;rgctx_fetch_trampoline_mrgctx_45
+00000243885C3890;00000243885C38BB;rgctx_fetch_trampoline_mrgctx_46
+00000243885C3900;00000243885C392B;rgctx_fetch_trampoline_mrgctx_47
+00000243885C3970;00000243885C399B;rgctx_fetch_trampoline_mrgctx_48
+00000243885C39E0;00000243885C3A0B;rgctx_fetch_trampoline_mrgctx_49
+00000243885C3A50;00000243885C3A78;rgctx_fetch_trampoline_rgctx_12
+00000243885C3AB0;00000243885C3AD8;rgctx_fetch_trampoline_rgctx_13
+00000243885C3B10;00000243885C3B38;rgctx_fetch_trampoline_rgctx_14
+00000243885C3B70;00000243885C3B98;rgctx_fetch_trampoline_rgctx_15
+00000243885C3BD0;00000243885C3BF8;rgctx_fetch_trampoline_rgctx_16
+---00000243885D3690;00000243885D386B;[mscorlib.dll] (wrapper managed-to-native) object:__icall_wrapper_mono_struct_delete_old (intptr,intptr)
+00000243885D3690;00000243885D386B;[mscorlib.dll] (wrapper managed-to-native) object:__icall_wrapper_mono_struct_delete_old (intptr,intptr)
+---00000243885D38A0;00000243885D3A4C;[mscorlib.dll] (wrapper managed-to-native) object:__icall_wrapper_mono_array_to_lparray (object)
+00000243885D38A0;00000243885D3A4C;[mscorlib.dll] (wrapper managed-to-native) object:__icall_wrapper_mono_array_to_lparray (object)
+---00000243885D3A60;00000243885D3C3B;[mscorlib.dll] (wrapper managed-to-native) object:__icall_wrapper_mono_free_lparray (object,intptr)
+00000243885D3A60;00000243885D3C3B;[mscorlib.dll] (wrapper managed-to-native) object:__icall_wrapper_mono_free_lparray (object,intptr)
+---00000243885D3C80;00000243885D3E2C;[mscorlib.dll] (wrapper managed-to-native) object:__icall_wrapper_mono_string_builder_to_utf16 (object)
+00000243885D3C80;00000243885D3E2C;[mscorlib.dll] (wrapper managed-to-native) object:__icall_wrapper_mono_string_builder_to_utf16 (object)
+---00000243885D3E40;00000243885D401B;[mscorlib.dll] (wrapper managed-to-native) object:__icall_wrapper_mono_string_utf16_to_builder (intptr,intptr)
+00000243885D3E40;00000243885D401B;[mscorlib.dll] (wrapper managed-to-native) object:__icall_wrapper_mono_string_utf16_to_builder (intptr,intptr)
+---00000243885D4030;00000243885D4203;[mscorlib.dll] (wrapper managed-to-native) object:__icall_wrapper_mono_marshal_free (intptr)
+00000243885D4030;00000243885D4203;[mscorlib.dll] (wrapper managed-to-native) object:__icall_wrapper_mono_marshal_free (intptr)
+00000243885C3C30;00000243885C3C5B;rgctx_fetch_trampoline_mrgctx_50
+00000243885C3CA0;00000243885C3CCB;rgctx_fetch_trampoline_mrgctx_51
+00000243885C3D10;00000243885C3D3E;rgctx_fetch_trampoline_mrgctx_52
+00000243885C3D80;00000243885C3DAE;rgctx_fetch_trampoline_mrgctx_53
+00000243885C3DF0;00000243885C3E1E;rgctx_fetch_trampoline_mrgctx_54
+00000243885C3E60;00000243885C3E8E;rgctx_fetch_trampoline_mrgctx_55
+00000243885C3ED0;00000243885C3EFE;rgctx_fetch_trampoline_mrgctx_56
+00000243885C3F40;00000243885C3F6E;rgctx_fetch_trampoline_mrgctx_57
+00000243885C3FB0;00000243885C3FC1;delegate_virtual_invoke_imt_m_15
+---00000243885D4280;00000243885D4434;[mscorlib.dll] (wrapper managed-to-native) object:__icall_wrapper_mono_string_from_byvalwstr (intptr,int)
+00000243885D4280;00000243885D4434;[mscorlib.dll] (wrapper managed-to-native) object:__icall_wrapper_mono_string_from_byvalwstr (intptr,int)
+---00000243885D4460;00000243885D4614;[mscorlib.dll] (wrapper managed-to-native) object:__icall_wrapper_mono_helper_ldstr (intptr,int)
+00000243885D4460;00000243885D4614;[mscorlib.dll] (wrapper managed-to-native) object:__icall_wrapper_mono_helper_ldstr (intptr,int)
+00000243885C3FD0;00000243885C3FFE;rgctx_fetch_trampoline_mrgctx_58
+00000243885C4040;00000243885C406E;rgctx_fetch_trampoline_mrgctx_59
+00000243885C40B0;00000243885C40DE;rgctx_fetch_trampoline_mrgctx_60
+00000243885C4120;00000243885C414E;rgctx_fetch_trampoline_mrgctx_61
+00000243885C4190;00000243885C41BE;rgctx_fetch_trampoline_mrgctx_62
+00000243885C4200;00000243885C4228;rgctx_fetch_trampoline_rgctx_17
+00000243885C4260;00000243885C4288;rgctx_fetch_trampoline_rgctx_18
+00000243885C42C0;00000243885C42E8;rgctx_fetch_trampoline_rgctx_19
+00000243885C4320;00000243885C4348;rgctx_fetch_trampoline_rgctx_20
+00000243885C4380;00000243885C43A8;rgctx_fetch_trampoline_rgctx_21
+00000243885C43E0;00000243885C4408;rgctx_fetch_trampoline_rgctx_22
+00000243885C4440;00000243885C4468;rgctx_fetch_trampoline_rgctx_23
+00000243885C44A0;00000243885C44C8;rgctx_fetch_trampoline_rgctx_24
+00000243885C4500;00000243885C4530;rgctx_fetch_trampoline_rgctx_25
+00000243885C4570;00000243885C45A0;rgctx_fetch_trampoline_rgctx_26
+00000243885C45E0;00000243885C460E;rgctx_fetch_trampoline_mrgctx_63
+00000243885C4650;00000243885C467E;rgctx_fetch_trampoline_mrgctx_64
+00000243885C46C0;00000243885C46EE;rgctx_fetch_trampoline_mrgctx_65
+00000243885C4730;00000243885C475E;rgctx_fetch_trampoline_mrgctx_66
+---00000243885D46F0;00000243885D48A4;[mscorlib.dll] (wrapper managed-to-native) object:__icall_wrapper_mono_ldvirtfn (object,intptr)
+00000243885D46F0;00000243885D48A4;[mscorlib.dll] (wrapper managed-to-native) object:__icall_wrapper_mono_ldvirtfn (object,intptr)
+---00000243885D48D0;00000243885D4AAC;[mscorlib.dll] (wrapper managed-to-native) object:__icall_wrapper___emul_frem (double,double)
+00000243885D48D0;00000243885D4AAC;[mscorlib.dll] (wrapper managed-to-native) object:__icall_wrapper___emul_frem (double,double)
+00000243885C47A0;00000243885C47AD;delegate_virtual_invoke_15
+00000243885C47C0;00000243885C47EE;rgctx_fetch_trampoline_mrgctx_67
+00000243885C4830;00000243885C485E;rgctx_fetch_trampoline_mrgctx_68
+00000243885C48A0;00000243885C48B0;delegate_virtual_invoke_29
+00000243885C48C0;00000243885C48EE;rgctx_fetch_trampoline_mrgctx_69
+---00000243885D4AF0;00000243885D4C9C;[mscorlib.dll] (wrapper managed-to-native) object:__icall_wrapper___emul_fconv_to_u4 (double)
+00000243885D4AF0;00000243885D4C9C;[mscorlib.dll] (wrapper managed-to-native) object:__icall_wrapper___emul_fconv_to_u4 (double)
+00000243885C4930;00000243885C4940;delegate_virtual_invoke_32
+00000243885C4950;00000243885C4960;delegate_virtual_invoke_31
+---00000243885D4CC0;00000243885D4E6C;[mscorlib.dll] (wrapper managed-to-native) object:__icall_wrapper___emul_fconv_to_ovf_i8 (double)
+00000243885D4CC0;00000243885D4E6C;[mscorlib.dll] (wrapper managed-to-native) object:__icall_wrapper___emul_fconv_to_ovf_i8 (double)
+---00000243885D4E80;00000243885D505B;[mscorlib.dll] (wrapper managed-to-native) object:__icall_wrapper_mono_monitor_enter_v4_internal (object,intptr)
+00000243885D4E80;00000243885D505B;[mscorlib.dll] (wrapper managed-to-native) object:__icall_wrapper_mono_monitor_enter_v4_internal (object,intptr)
+00000243885C4970;00000243885C4A6A;sdb_single_step_trampoline
+00000243885C4B90;00000243885C4BA0;delegate_virtual_invoke_22
+---00000243885D5070;00000243885D519A;[mscorlib.dll] (wrapper managed-to-native) object:__icall_wrapper_mono_thread_interruption_checkpoint ()
+00000243885D5070;00000243885D519A;[mscorlib.dll] (wrapper managed-to-native) object:__icall_wrapper_mono_thread_interruption_checkpoint ()
+00000243885C4BB0;00000243885C4BE0;rgctx_fetch_trampoline_rgctx_27
+00000243885C4C20;00000243885C4C50;rgctx_fetch_trampoline_rgctx_28
+00000243885C4C90;00000243885C4CC0;rgctx_fetch_trampoline_rgctx_29
+00000243885C4D00;00000243885C4D30;rgctx_fetch_trampoline_rgctx_30
+00000243885C4D70;00000243885C4DA0;rgctx_fetch_trampoline_rgctx_31
+00000243885C4DE0;00000243885C4E10;rgctx_fetch_trampoline_rgctx_32
+00000243885C4E50;00000243885C4E80;rgctx_fetch_trampoline_rgctx_33
+00000243885C4EC0;00000243885C4EF0;rgctx_fetch_trampoline_rgctx_34
+00000243885C4F30;00000243885C4F60;rgctx_fetch_trampoline_rgctx_35
+00000243885C4FA0;00000243885C4FD0;rgctx_fetch_trampoline_rgctx_36
