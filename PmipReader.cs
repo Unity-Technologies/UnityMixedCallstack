@@ -1,6 +1,4 @@
-﻿
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
@@ -13,8 +11,22 @@ namespace UnityMixedCallStack
 		private static List<Range> _rangesSortedByIp = new List<Range>();
 		private static List<Range> _legacyRanges = new List<Range>();
 		private static FuzzyRangeComparer _comparer = new FuzzyRangeComparer();
-		private static FileStream _fileStream;
-		private static StreamReader _fileStreamReader;
+
+		private struct PmipStreams
+		{
+			public FileStream fileStream;
+			public StreamReader fileStreamReader;
+
+			public void Dispose()
+			{
+				fileStreamReader.Dispose();
+				fileStreamReader = null;
+				fileStream.Dispose();
+				fileStream = null;
+			}
+		}
+
+		private static Dictionary<string, PmipStreams> _currentFiles = new Dictionary<string, PmipStreams>();
 
 		public static void Sort()
 		{
@@ -24,46 +36,56 @@ namespace UnityMixedCallStack
 
 		public static void DisposeStreams()
 		{
-			_fileStreamReader?.Dispose();
-			_fileStreamReader = null;
-
-			_fileStream?.Dispose();
-			_fileStream = null;
+			foreach (PmipStreams streams in _currentFiles.Values)
+				streams.Dispose();
+			_currentFiles.Clear();
 
 			_rangesSortedByIp.Clear();
+			_legacyRanges.Clear();
 		}
 		public static bool ReadPmipFile(string filePath)
 		{
-			//_debugPane?.OutputString("MIXEDCALLSTACK :: Reading pmip file: " + filePath + "\n");
-			DisposeStreams();
-			try
+			var _debugPane = UnityMixedCallstackFilter._debugPane;
+#if DEBUG
+			_debugPane?.OutputString("MIXEDCALLSTACK :: Reading pmip file: " + filePath + "\n");
+#endif
+			//DisposeStreams();
+
+			if (!_currentFiles.TryGetValue(filePath, out PmipStreams pmipStreams))
 			{
-				_fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite | FileShare.Delete);
-				_fileStreamReader = new StreamReader(_fileStream);
-				var versionStr = _fileStreamReader.ReadLine();
-				const char delimiter = ':';
-				var tokens = versionStr.Split(delimiter);
+				pmipStreams = new PmipStreams();
+				try
+				{
+					pmipStreams.fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite | FileShare.Delete);
+					pmipStreams.fileStreamReader = new StreamReader(pmipStreams.fileStream);
+					var versionStr = pmipStreams.fileStreamReader.ReadLine();
+					const char delimiter = ':';
+					var tokens = versionStr.Split(delimiter);
 
-				if (tokens.Length != 2)
-					throw new Exception("Failed reading input file " + filePath + ": Incorrect format");
+					if (tokens.Length != 2)
+						throw new Exception("Failed reading input file " + filePath + ": Incorrect format");
 
-				if (!double.TryParse(tokens[1], NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out var version))
-					throw new Exception("Failed reading input file " + filePath + ": Incorrect version format");
+					if (!double.TryParse(tokens[1], NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out var version))
+						throw new Exception("Failed reading input file " + filePath + ": Incorrect version format");
 
-				if (version > 2.0)
-					throw new Exception("Failed reading input file " + filePath + ": A newer version of UnityMixedCallstacks plugin is required to read this file");
-			}
-			catch (Exception ex)
-			{
-				//_debugPane?.OutputString("MIXEDCALLSTACK :: Unable to read dumped pmip file: " + ex.Message + "\n");
-				DisposeStreams();
-				return false;
+					if (version > 2.0)
+						throw new Exception("Failed reading input file " + filePath + ": A newer version of UnityMixedCallstacks plugin is required to read this file");
+				}
+				catch (Exception ex)
+				{
+					_debugPane?.OutputString("MIXEDCALLSTACK :: Unable to read dumped pmip file: " + ex.Message + "\n");
+					DisposeStreams();
+					return false;
+				}
+				_currentFiles.Add(filePath, pmipStreams);
 			}
 
 			try
 			{
 				string line;
-				while ((line = _fileStreamReader.ReadLine()) != null)
+				int count = 0;
+				int legacyCount = 0;
+				while ((line = pmipStreams.fileStreamReader.ReadLine()) != null)
 				{
 					const char delemiter = ';';
 					var tokens = line.Split(delemiter);
@@ -89,16 +111,27 @@ namespace UnityMixedCallStack
 						{
 							// legacy stored in new pmip file
 							_legacyRanges.Add(new Range() { Name = description, File = file, Start = startiplong, End = endipint });
+							legacyCount++;
 						}
 						else
-							_rangesSortedByIp.Add(new Range() { Name = description, File = file, Start = startiplong, End = endipint });
+						{
+							Range range = new Range() { Name = description, File = file, Start = startiplong, End = endipint };
+#if DEBUG
+							_debugPane?.OutputString($"MIXEDCALLSTACK :: adding range: {range}\n");
+#endif
+							_rangesSortedByIp.Add(range);
+							count++;
+						}
 					}
 				}
-				//_debugPane?.OutputString("MIXEDCALLSTACK :: map now has " + _rangesSortedByIp.Count + " entries! legacy map has: " + _legacyRanges.Count + "\n");
+#if DEBUG
+				if (count > 0 || legacyCount > 0)
+					_debugPane?.OutputString($"MIXEDCALLSTACK :: added {count} to map for a total of {_rangesSortedByIp.Count} entries! Added {legacyCount} to legacy map for a total of {_legacyRanges.Count} \n");
+#endif
 			}
 			catch (Exception ex)
 			{
-				//_debugPane?.OutputString("MIXEDCALLSTACK :: Unable to read dumped pmip file: " + ex.Message + "\n");
+				_debugPane?.OutputString("MIXEDCALLSTACK :: Unable to read dumped pmip file: " + ex.Message + "\n");
 				DisposeStreams();
 				return false;
 			}

@@ -8,6 +8,11 @@ namespace UnityMixedCallstack
         public ulong End;
         public string Name;
         public string File;
+
+        public override string ToString()
+        {
+            return $"{File}::{Name} -- IP Range: {Start:X16} -> {End:X16}";
+        }
     }
     class FuzzyRangeComparer : IComparer<Range>
     {

@@ -15,7 +15,7 @@ namespace UnityMixedCallstack
     public class UnityMixedCallstackFilter : IDkmCallStackFilter, IDkmLoadCompleteNotification, IDkmModuleInstanceLoadNotification
     {
         private static bool _enabled;
-        private static IVsOutputWindowPane _debugPane;
+        public static IVsOutputWindowPane _debugPane;
         private static Dictionary<int, PmipFile> _currentFiles = new Dictionary<int, PmipFile>();
 
         struct PmipFile
@@ -153,8 +153,8 @@ namespace UnityMixedCallstack
             if (taskFiles.Length < 1)
                 return;
 
-            if (!CheckForUpdatedFiles(taskFiles))
-                return;
+            if (CheckForUpdatedFiles(taskFiles))
+                PmipReader.DisposeStreams();
 
             foreach (PmipFile pmipFile in _currentFiles.Values)
             {
