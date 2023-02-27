@@ -17,10 +17,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.TestPlatform" Version="17.2.0" />
-    <PackageReference Include="MSTest.TestAdapter" Version="2.2.10" />
+    <PackageReference Include="Microsoft.TestPlatform" Version="17.5.0" />
+    <PackageReference Include="MSTest.TestAdapter" Version="3.0.2" />
     <PackageReference Include="NUnit" Version="3.13.3" />
-    <PackageReference Include="NUnit3TestAdapter" Version="4.2.1" />
+    <PackageReference Include="NUnit3TestAdapter" Version="4.4.0" />
   </ItemGroup>
 
   <Import Project="$(ConcordSDKDir)Tools\bin\Microsoft.VSSDK.Debugger.VSDConfigTool.targets" />
