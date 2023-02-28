@@ -1,0 +1,50 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net472</TargetFramework>
+
+    <IsPackable>false</IsPackable>
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+    <PlatformTarget>x64</PlatformTarget>
+    <Platforms>AnyCPU;x64</Platforms>
+    <VSSdkPath Condition="'$(VisualStudioVersion.Contains(`17`))'">$(ProgramFiles)\Microsoft Visual Studio\2022\Professional\VSSDK\</VSSdkPath>
+    <VSSdkPath Condition="'$(VisualStudioVersion.Contains(`16`))'">$(MSBuildProgramFiles32)\Microsoft Visual Studio\2019\Professional\VSSDK\</VSSdkPath>
+    <ConcordSDKDir>$(VSSdkPath)VisualStudioIntegration\</ConcordSDKDir>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="pmip_32260_3.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.TestPlatform" Version="17.5.0" />
+    <PackageReference Include="MSTest.TestAdapter" Version="3.0.2" />
+    <PackageReference Include="NUnit" Version="3.13.3" />
+    <PackageReference Include="NUnit3TestAdapter" Version="4.4.0" />
+  </ItemGroup>
+
+  <Import Project="$(ConcordSDKDir)Tools\bin\Microsoft.VSSDK.Debugger.VSDConfigTool.targets" />
+
+  <ItemGroup>
+    <ProjectReference Include="..\UnityMixedCallStack.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="TestData\line-numbers\pmip_23672_1_0.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="TestData\line-numbers\pmip_23672_4_1.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="TestData\pmip_31964_3.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="TestData\pmip_32260_3.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="TestData\pmip_44920_4.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+</Project>

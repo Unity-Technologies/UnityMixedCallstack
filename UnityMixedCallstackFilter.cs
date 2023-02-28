@@ -8,22 +8,25 @@ using Microsoft.VisualStudio.Debugger.CallStack;
 using Microsoft.VisualStudio.Debugger.ComponentInterfaces;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
+using UnityMixedCallStack;
 
 namespace UnityMixedCallstack
 {
     public class UnityMixedCallstackFilter : IDkmCallStackFilter, IDkmLoadCompleteNotification, IDkmModuleInstanceLoadNotification
     {
-        private static List<Range> _rangesSortedByIp = new List<Range>();
-        private static FuzzyRangeComparer _comparer = new FuzzyRangeComparer();
         private static bool _enabled;
-        private static IVsOutputWindowPane _debugPane;
-        private static string _currentFile;
-        private static FileStream _fileStream;
-        private static StreamReader _fileStreamReader;
+        public static IVsOutputWindowPane _debugPane;
+        private static Dictionary<int, PmipFile> _currentFiles = new Dictionary<int, PmipFile>();
+
+        struct PmipFile
+        {
+            public int count;
+            public string path;
+        }
 
         public void OnLoadComplete(DkmProcess process, DkmWorkList workList, DkmEventDescriptor eventDescriptor)
         {
-            DisposeStreams();
+            PmipReader.DisposeStreams();
 
             if (_debugPane == null)
             {
@@ -47,14 +50,30 @@ namespace UnityMixedCallstack
             if (!_enabled) // environment variable not set
                 return new[] { input };
 
-            return new[] { UnityMixedStackFrame(stackContext, input) };
+            try
+            {
+                DkmStackWalkFrame[] retVal = new[] { UnityMixedStackFrame(stackContext, input) };
+                return retVal;
+            } catch (Exception ex)
+            {
+                _debugPane?.OutputString("UNITYMIXEDCALLSTACK :: ip : " + input.Process.LivePart.Id + " threw exception: " + ex.Message + "\n" + ex.StackTrace);
+            }
+            return new[] { input };
         }
 
         private static DkmStackWalkFrame UnityMixedStackFrame(DkmStackContext stackContext, DkmStackWalkFrame frame)
         {
             RefreshStackData(frame.Process.LivePart.Id);
+#if DEBUG
+            _debugPane?.OutputString($"UNITYMIXEDCALLSTACK :: done refreshing data :: looking for address: {frame.InstructionAddress.CPUInstructionPart.InstructionPointer:X16}\n");
+#endif
+
             string name = null;
-            if (TryGetDescriptionForIp(frame.InstructionAddress.CPUInstructionPart.InstructionPointer, out name))
+            if (PmipReader.TryGetDescriptionForIp(frame.InstructionAddress.CPUInstructionPart.InstructionPointer, out name))
+            {
+#if DEBUG
+                _debugPane?.OutputString($"ip: {frame.InstructionAddress.CPUInstructionPart.InstructionPointer:X16} ### {name}\n");
+#endif
                 return DkmStackWalkFrame.Create(
                     stackContext.Thread,
                     frame.InstructionAddress,
@@ -64,6 +83,11 @@ namespace UnityMixedCallstack
                     name,
                     frame.Registers,
                     frame.Annotations);
+            }
+#if DEBUG
+            else
+                _debugPane?.OutputString($"IP not found: {frame.InstructionAddress.CPUInstructionPart.InstructionPointer:X16}\n");
+#endif
 
             return frame;
         }
@@ -80,17 +104,45 @@ namespace UnityMixedCallstack
             return int.Parse(tokens[2]);
         }
 
-        private static void DisposeStreams()
+        private static bool CheckForUpdatedFiles(FileInfo[] taskFiles)
         {
-            _fileStreamReader?.Dispose();
-            _fileStreamReader = null;
+            bool retVal = false;
+            try
+            {
+                foreach (FileInfo taskFile in taskFiles)
+                {
+                    string fName = Path.GetFileNameWithoutExtension(taskFile.Name);
+                    string[] tokens = fName.Split('_');
+                    PmipFile pmipFile = new PmipFile()
+                    {
+                        count = int.Parse(tokens[2]),
+                        path = taskFile.FullName
+                    };
 
-            _fileStream?.Dispose();
-            _fileStream = null;
-
-            _currentFile = null;
-
-            _rangesSortedByIp.Clear();
+                    // 3 is legacy and treat everything as root domain
+                    if (tokens.Length == 3 &&
+                        (!_currentFiles.TryGetValue(0, out PmipFile curFile) ||
+                        curFile.count < pmipFile.count))
+                    {
+                        _currentFiles[0] = pmipFile;
+                        retVal = true;
+                    }
+                    else if (tokens.Length == 4)
+                    {
+                        int domainID = int.Parse(tokens[3]);
+                        if (!_currentFiles.TryGetValue(domainID, out PmipFile cFile) || cFile.count < pmipFile.count)
+                        {
+                            _currentFiles[domainID] = pmipFile;
+                            retVal = true;
+                        }
+                    }
+                }
+            } catch (Exception e)
+            {
+                _debugPane?.OutputString("MIXEDCALLSTACK :: Exception thrown during CheckForUpdatedFiles: " + e.Message + "\n");
+                _enabled = false;
+            }
+            return retVal;
         }
 
         private static void RefreshStackData(int pid)
@@ -101,83 +153,20 @@ namespace UnityMixedCallstack
             if (taskFiles.Length < 1)
                 return;
 
-            Array.Sort(taskFiles, (a, b) => GetFileNameSequenceNum(a.Name).CompareTo(GetFileNameSequenceNum(b.Name)));
-            var fileName = taskFiles[taskFiles.Length - 1].FullName;
+            if (CheckForUpdatedFiles(taskFiles))
+                PmipReader.DisposeStreams();
 
-            if (_currentFile != fileName)
+            foreach (PmipFile pmipFile in _currentFiles.Values)
             {
-                DisposeStreams();
-                try
+
+                _enabled = PmipReader.ReadPmipFile(pmipFile.path);
+                if (!_enabled)
                 {
-                    _fileStream = new FileStream(fileName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite | FileShare.Delete);
-                    _fileStreamReader = new StreamReader(_fileStream);
-                    _currentFile = fileName;
-                    var versionStr = _fileStreamReader.ReadLine();
-                    const char delimiter = ':';
-                    var tokens = versionStr.Split(delimiter);
-
-                    if (tokens.Length != 2)
-                        throw new Exception("Failed reading input file " + fileName + ": Incorrect format");
-
-                    if (!double.TryParse(tokens[1], NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out var version))
-                        throw new Exception("Failed reading input file " + fileName + ": Incorrect version format");
-
-                    if(version > 1.0)
-                        throw new Exception("Failed reading input file " + fileName + ": A newer version of UnityMixedCallstacks plugin is required to read this file");
-                }
-                catch (Exception ex)
-                {
-                    _debugPane?.OutputString("Unable to read dumped pmip file: " + ex.Message + "\n");
-                    DisposeStreams();
-                    _enabled = false;
-                    return;
+                    _debugPane?.OutputString($"Unable to read file: {pmipFile.path}\n");
                 }
             }
 
-            try
-            {
-                string line;
-                while ((line = _fileStreamReader.ReadLine()) != null)
-                {
-                    const char delemiter = ';';
-                    var tokens = line.Split(delemiter);
-
-                    //should never happen, but lets be safe and not get array out of bounds if it does
-                    if (tokens.Length != 3)
-                        continue;
-
-                    var startip = tokens[0];
-                    var endip = tokens[1];
-                    var description = tokens[2];
-
-                    var startiplong = ulong.Parse(startip, NumberStyles.HexNumber);
-                    var endipint = ulong.Parse(endip, NumberStyles.HexNumber);
-                    _rangesSortedByIp.Add(new Range() { Name = description, Start = startiplong, End = endipint });
-                }
-            }
-            catch (Exception ex)
-            {
-                _debugPane?.OutputString("Unable to read dumped pmip file: " + ex.Message + "\n");
-                DisposeStreams();
-                _enabled = false;
-                return;
-            }
-
-            _rangesSortedByIp.Sort((r1, r2) => r1.Start.CompareTo(r2.Start));
-        }
-
-        private static bool TryGetDescriptionForIp(ulong ip, out string name)
-        {
-            name = string.Empty;
-
-            var rangeToFindIp = new Range() { Start = ip };
-            var index = _rangesSortedByIp.BinarySearch(rangeToFindIp, _comparer);
-
-            if (index < 0)
-                return false;
-
-            name = _rangesSortedByIp[index].Name;
-            return true;
+            PmipReader.Sort();
         }
 
         public void OnModuleInstanceLoad(DkmModuleInstance moduleInstance, DkmWorkList workList, DkmEventDescriptorS eventDescriptor)
