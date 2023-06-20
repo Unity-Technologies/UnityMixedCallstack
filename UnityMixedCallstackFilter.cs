@@ -21,6 +21,7 @@ namespace UnityMixedCallstack
         struct PmipFile
         {
             public int count;
+            public int pid;
             public string path;
         }
 
@@ -65,7 +66,7 @@ namespace UnityMixedCallstack
         {
             RefreshStackData(frame.Process.LivePart.Id);
 #if DEBUG
-            _debugPane?.OutputString($"UNITYMIXEDCALLSTACK :: done refreshing data :: looking for address: {frame.InstructionAddress.CPUInstructionPart.InstructionPointer:X16}\n");
+            _debugPane?.OutputString($"UNITYMIXEDCALLSTACK :: done refreshing data for pid({frame.Process.LivePart.Id}) :: looking for address: {frame.InstructionAddress.CPUInstructionPart.InstructionPointer:X16}\n");
 #endif
 
             string name = null;
@@ -116,13 +117,14 @@ namespace UnityMixedCallstack
                     PmipFile pmipFile = new PmipFile()
                     {
                         count = int.Parse(tokens[2]),
+                        pid = int.Parse(tokens[1]),
                         path = taskFile.FullName
                     };
 
                     // 3 is legacy and treat everything as root domain
                     if (tokens.Length == 3 &&
                         (!_currentFiles.TryGetValue(0, out PmipFile curFile) ||
-                        curFile.count < pmipFile.count))
+                        curFile.count < pmipFile.count || curFile.pid != pmipFile.pid))
                     {
                         _currentFiles[0] = pmipFile;
                         retVal = true;
@@ -130,7 +132,8 @@ namespace UnityMixedCallstack
                     else if (tokens.Length == 4)
                     {
                         int domainID = int.Parse(tokens[3]);
-                        if (!_currentFiles.TryGetValue(domainID, out PmipFile cFile) || cFile.count < pmipFile.count)
+                        if (!_currentFiles.TryGetValue(domainID, out PmipFile cFile) || cFile.count < pmipFile.count ||
+                            cFile.pid != pmipFile.pid)
                         {
                             _currentFiles[domainID] = pmipFile;
                             retVal = true;
