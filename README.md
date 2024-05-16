@@ -15,7 +15,8 @@ Before:
 ![Before Unity Mixed Callstack](https://raw.githubusercontent.com/mderoy/UnityMixedCallstack/master/Images/csb.png)
 
 After:
-![After Unity Mixed Callstack](https://raw.githubusercontent.com/mderoy/UnityMixedCallstack/master/Images/cs.png)
+
+![After Unity Mixed Callstack](https://raw.githubusercontent.com/mderoy/UnityMixedCallstack/master/Images/cs.png)
 
 ## Get started
 
@@ -23,7 +24,6 @@ After:
     
 * You must be using the 4.6 Mono Runtime.
 * Only available for Unity 2018.2 and later.
-* Only works with internal source builds of the Editor.
 * Older versions of Visual Studio require an older version of the plugin. Version 2.6.1 was the last version with working support for Visual Studio 2019.
 
 ### Build from source
