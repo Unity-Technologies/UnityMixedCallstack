@@ -45,10 +45,12 @@ To install the plugin, double click UnityMixedCallStack.vsix (open with Visual S
 
 The plugin can be enabled via a diagnostic switch in the Editor.
 
-Select **Edit > Preferences** to open the Unity Preferences window. Select the Diagnostics tab on the left, and then select the **EnableMixedCallstackDebugging** option. You'll need to restart the Editor after setting this option in order for it to take effect.
+Select **Edit > Preferences** to open the Unity Preferences window. Select the **Diagnostics** tab on the left, and then select the dropdown next to the **MixedCallstackDebuggingLevel** option (see image below). There are three options, **Off**, **Legacy** and **LineNumbers**. Select **LineNumbers** as **Legacy** will only display the function name in the mixed callstack whereas **LineNumbers** will also provide the line numbers. You'll need to restart the Editor after setting this option in order for it to take effect.
 
 > [!NOTE]
 > On newer Unity versions (2023) the diagnostics switches are grouped into sub-sections and the setting can be found in the **Core** section.
+
+![Image of MixedCallstackDebuggingLevel setting](Images/settingInEditor.png)
 
 ### Disable the **Enable Just My Code** setting in Visual Studio
 
@@ -83,7 +85,30 @@ The Visual Studio plugin itself is fairly simple. We open a filestream on the pm
 
 ## Advanced options
 
-The diagnostic switch has not been configured to enable the plugin when you build standalone players. You can set the environment variable `UNITY_MIXED_CALLSTACK` to enable the plugin.
+The diagnostic switch has not been configured to enable the plugin when you build standalone players. To use **UnityMixedCallstack** with players you need to set the environment variable `UNITY_MIXED_CALLSTACK` to enable the plugin. For details on how to do that see "How to use UnityMixedCallstack with Players" below.
 
 > [!WARNING]
-> **DO NOT DO THIS GLOBALLY** as this will activate the plugin for every Mono used in Unity **including the ones used to build Unity**, so unless you want your next build to take hours **do not do this** in the same shells you're building in.
+> **DO NOT SET `UNITY_MIXED_CALLSTACK` GLOBALLY** as this will activate the plugin for every Mono used in Unity **including the ones used to build Unity**, so unless you want your next build to take hours **do not do this** in the same shells you're building in.
+
+### How to use UnityMixedCallstack with Players
+
+To use UnityMixedCallstack with players one can follow the following instructions (in addition to the standard instructions above):
+1. First open the Editor-project in Visual Studio (either using **unity\Projects\VisualStudioAllTargets-unity.sln** or **unity\Projects\Editor-unity.sln**). 
+2. Then, in **Visual Studio** in the **Solution Explorer** right-click the **EditorApp** and select **Properties** (see image below for reference)
+
+
+![Image of Visual Studio setting path](Images/envSettingsStep1.png)
+
+3. Now, in the category **Debugger->Environment** add the following variable `UNITY_MIXED_CALLSTACK=1` and hit **Apply**. (see image below)
+![Image of Visual Studio setting path](Images/envSettingsStep2.png)
+4. Once this is done, open a new command terminal.
+5. In the command terminal run `set UNITY_GIVE_CHANCE_TO_ATTACH_DEBUGGER=1`. This option will give you the option to attach a native debugger when you run the player executable.
+6. Now, in the same terminal run the executable via `[path to executable]/[name of player].exe`
+7. You will now be prompted to attach with a native debugger (see image below)
+![Image of Visual Studio setting path](Images/attach.png)
+8. When the prompt pops up, navigate to **Visual Studio** where you have the Editor project opened (with the correct settings from above), then click **Debug->Attach To Process**.
+9. In the list select the player you wish to debug (it should have the same name as in step 6 above).
+10. Hit attach,  then return to the natuve debugger prompt from step 7 and hit OK.
+11. You are now attached to the standalone player with a native debugger and should see the full callstack, including the mono instructions.
+
+These steps should be enough to see the full callstacks in a Unity Standalone Player!
