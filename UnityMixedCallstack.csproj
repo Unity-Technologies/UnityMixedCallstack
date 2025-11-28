@@ -5,6 +5,7 @@
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">11.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
     <!-- <VSSDK140Install Condition="'$(VSSDK140Install)' == ''">$(MSBuildProgramFiles32)\Microsoft Visual Studio 14.0\VSSDK\</VSSDK140Install> -->
+    <VSSdkPath Condition="'$(VisualStudioVersion.Contains(`18`))'">$(ProgramFiles)\Microsoft Visual Studio\2026A\VSSDK\</VSSdkPath>
     <VSSdkPath Condition="'$(VisualStudioVersion.Contains(`17`))'">$(ProgramFiles)\Microsoft Visual Studio\2022\Professional\VSSDK\</VSSdkPath>
     <VSSdkPath Condition="'$(VisualStudioVersion.Contains(`16`))'">$(MSBuildProgramFiles32)\Microsoft Visual Studio\2019\Professional\VSSDK\</VSSdkPath>
     <VsixType>v3</VsixType>
@@ -56,12 +57,26 @@
     <StartArguments>/rootsuffix Exp</StartArguments>
   </PropertyGroup>
   <PropertyGroup>
+    <VsVersion Condition="'$(VisualStudioVersion.Contains(`18`))'">VS2026</VsVersion>
     <VsVersion Condition="'$(VisualStudioVersion.Contains(`17`))'">VS2022</VsVersion>
     <VsVersion Condition="'$(VisualStudioVersion.Contains(`16`))'">VS2019</VsVersion>
     <OutputPath>bin\$(VsVersion)\$(Configuration)\</OutputPath>
     <IntermediateOutputPath>obj\$(VsVersion)\$(Configuration)\</IntermediateOutputPath>
   </PropertyGroup>
   <Choose>
+    <When Condition="'$(VsVersion)' == 'VS2026'">
+      <PropertyGroup>
+        <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+      </PropertyGroup>
+      <ItemGroup>
+        <PackageReference Include="Microsoft.VisualStudio.SDK" Version="17.4.33103.184" />
+        <PackageReference Include="Microsoft.VSSDK.BuildTools" Version="17.5.4065">
+          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+          <PrivateAssets>all</PrivateAssets>
+        </PackageReference>
+        <PackageReference Include="Microsoft.VisualStudio.Debugger.Engine" Version="17.0.2012801" />
+      </ItemGroup>
+    </When>	    
     <When Condition="'$(VsVersion)' == 'VS2022'">
       <PropertyGroup>
         <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>

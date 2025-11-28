@@ -1,12 +1,13 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net472</TargetFramework>
+    <TargetFramework>net48</TargetFramework>
 
     <IsPackable>false</IsPackable>
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
     <PlatformTarget>x64</PlatformTarget>
     <Platforms>AnyCPU;x64</Platforms>
+	<VSSdkPath Condition="'$(VisualStudioVersion.Contains(`18`))'">$(ProgramFiles)\Microsoft Visual Studio\2026A\VSSDK\</VSSdkPath>
     <VSSdkPath Condition="'$(VisualStudioVersion.Contains(`17`))'">$(ProgramFiles)\Microsoft Visual Studio\2022\Professional\VSSDK\</VSSdkPath>
     <VSSdkPath Condition="'$(VisualStudioVersion.Contains(`16`))'">$(MSBuildProgramFiles32)\Microsoft Visual Studio\2019\Professional\VSSDK\</VSSdkPath>
     <ConcordSDKDir>$(VSSdkPath)VisualStudioIntegration\</ConcordSDKDir>
